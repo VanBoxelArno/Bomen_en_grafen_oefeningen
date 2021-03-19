@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.ArrayList;
+
 public class BinarySearchTree<E extends Comparable<E>> extends BinaryTree<E> {
 
 	public BinarySearchTree(E data, BinarySearchTree<E> leftTree, BinarySearchTree<E> rightTree) {
@@ -16,7 +18,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends BinaryTree<E> {
 
 	@Override
 	public boolean lookup(E data) {
-		if (data == null) {
+		if (this.data == null) {
 			return false;
 		}
 		if (this.data.compareTo(data) == 0) {
@@ -110,6 +112,23 @@ public class BinarySearchTree<E extends Comparable<E>> extends BinaryTree<E> {
 			return this.data;
 		} else {
 			return this.rightTree.searchGreatest();
+		}
+	}
+
+	public void getPath(E data) {
+		if (!lookup(data)) {//data komt niet voor in BST
+			System.out.println("Null");
+		}
+
+		if (this.data.compareTo(data) == 0){
+			System.out.println(data);
+		} else {
+			System.out.println(this.data);
+			if (this.data.compareTo(data) > 0) {//ga links, data komt zeker voor!
+				this.leftTree.getPath(data);
+			} else {// ga rechts, data zit daar gegarandeerd
+				this.rightTree.getPath(data);
+			}
 		}
 	}
 

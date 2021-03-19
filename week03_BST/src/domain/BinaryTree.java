@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class BinaryTree<E>{
 	E data;
@@ -57,6 +58,7 @@ public class BinaryTree<E>{
 	protected void cleanUp() {
 
 	}
+	void getPath(E data){}
 }
 
 /*	public void printInorder(){
