@@ -34,7 +34,7 @@ public class Graph {
         return this.verbindingsMatrix.length;
     }
 
-    private int[] findAncestors(int start, int destination) {// nummering van
+    /*private int[] findAncestors(int start, int destination) {// nummering van
         // start-knoop
         // (1..aantal_knopen)
         // naar
@@ -51,6 +51,54 @@ public class Graph {
         // oefening 1.4
 
         return ancestors;
+    }*/
+    private boolean rechtstreekseVerbinding(int van,int tot) {
+        //System.out.println("verbinding van "+van+" tot "+tot+"?");
+        return this.getVerbindingsMatrix()[van - 1][tot - 1];
+    }
+
+
+    private int[] findAncestors(int start,int destination)
+         {
+         int aantalKnopen =this.getAantalKnopen();
+         int[] ancestors =new int[aantalKnopen];
+         initArray(ancestors, infty);
+
+         Queue<Integer> queue =new LinkedList<>();
+         queue.add(start);
+         ancestors[start - 1] = 0;
+
+         int huidig = queue.remove();
+         while(huidig != destination) {
+             // System.out.println("huidig = "+huidig);
+             // zoek alle nog niet bezochte knooppunten vanuit huidig
+             for(int i=1; i<=aantalKnopen; i++){
+             if(rechtstreekseVerbinding(huidig, i) && (ancestors[i - 1] == infty)) {
+                 //System.out.println("ja");
+                 //voeg knoop i toe aan queue
+                 queue.add(i);
+                 //duid aan dat huidig de ouder is van i in ancestormatrix
+                 ancestors[i - 1] = huidig;
+             }
+         }
+             //voorste element van queue wordt nieuwe huidige knoop
+             if(!queue.isEmpty()) {
+                 huidig = queue.remove(); //of .poll() wat geen exception gooit
+             }
+             else{
+                 //queue is leeg, stop maar
+                 break;
+                }
+             }
+        return ancestors;
+    }
+    private boolean[][] getVerbindingsMatrix() {
+        return verbindingsMatrix;
+    }
+
+    private void initArray(int[] array, int value) {
+        for (int i = 0; i < array.length; i++)
+            array[i] = value;
     }
 
     public List<Integer> findPath(int start, int destination) {
@@ -61,14 +109,16 @@ public class Graph {
         List<Integer> path = new LinkedList<>();
 
         // oefening 1.5
-
+        int ouder = ancestors[destination - 1];
+        while(ouder != 0 && ouder != infty) {
+            path.add(0, destination);
+            destination = ouder;
+            ouder = ancestors[destination - 1];
+        }
+        if(ouder == 0) {
+            path.add(0,destination);
+        }
         return path;
-
-    }
-
-    private void initArray(int[] array, int value) {
-        for (int i = 0; i < array.length; i++)
-            array[i] = value;
     }
 
 
